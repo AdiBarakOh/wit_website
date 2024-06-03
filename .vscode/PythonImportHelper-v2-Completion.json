@@ -1,0 +1,197 @@
+[
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "flask",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "flask",
+        "description": "flask",
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "url_for",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "wit_add",
+        "importPath": "wit_project",
+        "description": "wit_project",
+        "isExtraImport": true,
+        "detail": "wit_project",
+        "documentation": {}
+    },
+    {
+        "label": "wit_branch",
+        "importPath": "wit_project",
+        "description": "wit_project",
+        "isExtraImport": true,
+        "detail": "wit_project",
+        "documentation": {}
+    },
+    {
+        "label": "wit_checkout",
+        "importPath": "wit_project",
+        "description": "wit_project",
+        "isExtraImport": true,
+        "detail": "wit_project",
+        "documentation": {}
+    },
+    {
+        "label": "wit_commit",
+        "importPath": "wit_project",
+        "description": "wit_project",
+        "isExtraImport": true,
+        "detail": "wit_project",
+        "documentation": {}
+    },
+    {
+        "label": "wit_init",
+        "importPath": "wit_project",
+        "description": "wit_project",
+        "isExtraImport": true,
+        "detail": "wit_project",
+        "documentation": {}
+    },
+    {
+        "label": "wit_status",
+        "importPath": "wit_project",
+        "description": "wit_project",
+        "isExtraImport": true,
+        "detail": "wit_project",
+        "documentation": {}
+    },
+    {
+        "label": "wit_general_functions",
+        "importPath": "wit_project",
+        "description": "wit_project",
+        "isExtraImport": true,
+        "detail": "wit_project",
+        "documentation": {}
+    },
+    {
+        "label": "index",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def index() -> Response | str:\n    \"\"\"Provide files' status and an option to commit.\"\"\"\n    wit_init.init()\n    file_to_add = None\n    commit_ok = None\n    if request.method == 'POST':\n        file_to_add = request.form.get('path_to_file')\n        commit_message = request.form.get('commit_message')\n        commit_ok = commit_files(commit_message)\n    status = wit_status.status()",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "check_add",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def check_add(file_name: str) -> Response:\n    \"\"\"Check if wit_add was made\"\"\"\n    file_path = Path(file_name.strip('\"'))\n    wit_add.add(file_path)\n    if test_add(file_path):\n        add_ok_template = render_template(\"add_ok.html\", file_name=file_name)    \n        return Response(add_ok_template, status=200)\n    add_failed_template = render_template(\"add_failed.html\", file_name=file_name)\n    return Response(add_failed_template, status=400)\n@create_app.route('/add', methods=['GET', 'POST'])",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "add_file",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def add_file() -> Response | str:\n    \"\"\"Add user's input of file.\"\"\"\n    if request.method == 'POST':\n        file_name = request.form.get('file_name')\n        return check_add(file_name)\n    return render_template(\"add_file.html\")\n@create_app.route('/branches', methods=['GET', 'POST'])\ndef branches() -> str:\n    \"\"\"show branches and create new when requested.\"\"\"\n    activated_branch = None",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "branches",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def branches() -> str:\n    \"\"\"show branches and create new when requested.\"\"\"\n    activated_branch = None\n    branches = get_all_branches()  \n    activated_branch = wit_general_functions.get_activated_branch_name(Path.cwd() / '.wit')\n    if request.method == 'POST':\n        new_branch = request.form.get('new_branch')\n        if new_branch != '':\n            wit_branch.branch(new_branch)\n    return render_template(\"branches.html\", branches=branches, activated_branch=activated_branch)",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "checkout_branch",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def checkout_branch() -> str:\n    all_branches = get_all_branches()\n    redirect_url = url_for('index')\n    checkout_ok = None\n    files_in_branch_head_commit = None\n    branch_name = request.args.get('branch_name')\n    if branch_name:\n        checkout_ok = wit_checkout.checkout(branch_name)\n        commit_head = wit_general_functions.get_commit_head(Path.cwd() / '.wit'/ 'references.txt')\n        if commit_head:",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "commit_files",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def commit_files(commit_message: str | None) -> bool:\n    if commit_message:\n        wit_commit.commit(commit_message)\n        return test_commit()\n    return False\ndef test_commit() -> bool:\n    commit_head = wit_general_functions.get_commit_head(Path.cwd() / '.wit'/ 'references.txt')\n    commit_folder = Path.cwd() / '.wit'/ \"images\" / commit_head\n    staging_folder: Path = Path.cwd() / '.wit' / \"staging_area\"\n    if commit_head and commit_folder:",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "test_commit",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def test_commit() -> bool:\n    commit_head = wit_general_functions.get_commit_head(Path.cwd() / '.wit'/ 'references.txt')\n    commit_folder = Path.cwd() / '.wit'/ \"images\" / commit_head\n    staging_folder: Path = Path.cwd() / '.wit' / \"staging_area\"\n    if commit_head and commit_folder:\n       diffrent_save = wit_general_functions.compare_files_and_dir(staging_folder, commit_folder).diffrent_save_of_files\n       not_available = wit_general_functions.compare_files_and_dir(staging_folder, commit_folder).in_dir_1_not_in_dir_2\n       return len(diffrent_save) + len(not_available) == 0\n    return False\ndef get_all_branches() -> set[str] | None:",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "get_all_branches",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def get_all_branches() -> set[str] | None:\n    references_file = Path.cwd() / '.wit' / 'references.txt'\n    if references_file.exists():\n        refrences_by_commits = references_file.read_text().splitlines()\n        all_branches: set[str] = set()\n        for ref in refrences_by_commits:\n            branch_ref = ref.split('=')[0]\n            if ref.startswith(branch_ref) and branch_ref != 'HEAD':\n                all_branches.add(branch_ref)\n        return all_branches",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "test_add",
+        "kind": 2,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "def test_add(file_added: Path) -> bool:\n    staging_folder: Path = Path.cwd() / '.wit' / \"staging_area\"\n    return file_added in wit_general_functions.compare_files_and_dir(Path.cwd(), staging_folder).same_files\nif __name__ == '__main__':\n    create_app.run(host='localhost', port=5000, debug=True)",
+        "detail": "wit_website.app",
+        "documentation": {}
+    },
+    {
+        "label": "create_app",
+        "kind": 5,
+        "importPath": "wit_website.app",
+        "description": "wit_website.app",
+        "peekOfCode": "create_app = flask.Flask(__name__)\n@create_app.route('/', methods=['GET', 'POST'])\ndef index() -> Response | str:\n    \"\"\"Provide files' status and an option to commit.\"\"\"\n    wit_init.init()\n    file_to_add = None\n    commit_ok = None\n    if request.method == 'POST':\n        file_to_add = request.form.get('path_to_file')\n        commit_message = request.form.get('commit_message')",
+        "detail": "wit_website.app",
+        "documentation": {}
+    }
+]

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Wits for Wit</title>
+    <link rel="stylesheet" href="static\styles\styles.css">
+  </head>
+  <body>
+
+  <nav class="top-nav">
+      <ul>
+          <li><a href="/">Main page</a></li>
+          <li><a href="/add">Add page</a></li>
+          <li><a href="/branches">Branches page</a></li>
+          <li><a href="/checkout">Checkout page</a></li>
+          
+      </ul>
+  </nav>
+
+    <h1 class=first-headline>Status</h1>
+
+    <h2 class=semi-head-line>Commit:</h2>
+    <form method="POST">
+      <label for="commit_message">Enter commit message:</label>
+      <input name="commit_message" class=first-input placeholder="text" />
+      <button class=stolen-pretty-button type="submit">Commit files</button>
+    </form>
+    {% if commit_success %}
+    <p> commit was made! </p>
+    {% elif commit_message %}
+    <p> commit FAILED! </p>
+    {% endif %}
+
+    <hr class=seperator>
+    <h2 class=semi-head-line>Latest_commit_head: </h2>
+      <p>{{latest_commit_head}}</p>
+
+    <hr class=seperator>
+    <h2 class=semi-head-line>Changes to be committed:</h2>
+    {% for file_path in changes_to_be_committed %}
+      <p>{{file_path}} </p>
+    {% endfor %}
+
+    <hr class=seperator>
+    <h2 class=semi-head-line>Changes not staged for commit:</h2>
+      {% for file_path in changes_not_staged_for_commit %}
+      <ul>
+      <li class="highlight-on-hover"> {{file_path}} </li>
+      <li class=same-line-form><form method="POST"> 
+        <button class=stolen-pretty-button type="submit">Add to staging area</button>
+        <input type="hidden" name="path_to_file" value="{{file_path}}" />
+        </form> </li>
+      </ul>
+      {% endfor %}
+
+    <hr class=seperator>   
+    <h2 class=semi-head-line>Untracked files:</h2>
+    {% for file_path in untracked_files %}
+      <ul>
+      <li class="highlight-on-hover">{{file_path}}</li>
+      <li class=same-line-form> <p><form method="POST"> 
+          <button class=stolen-pretty-button type="submit">Add to staging area</button> 
+          <input type="hidden" name="path_to_file" value="{{file_path}}" />
+        </form> </li>
+      </ul>
+    {% endfor %}
+
+  
+  
+  
+  </body>
+</html>
