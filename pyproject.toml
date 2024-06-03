@@ -1,0 +1,4 @@
+[project]
+name = "wit_website"
+version = "1.0.0"
+description = "Wit website"

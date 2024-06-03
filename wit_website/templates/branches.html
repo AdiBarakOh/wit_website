@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Wits for Wit</title>
+    <link rel="stylesheet" href="static\styles\styles.css">
+  </head>
+  <body>
+
+    <nav class="top-nav">
+      <ul>
+          <li><a href="/">Main page</a></li>
+          <li><a href="/add">Add page</a></li>
+          <li><a href="/branches">Branches page</a></li>
+          <li><a href="/checkout">Checkout page</a></li>
+      </ul>
+  </nav>
+
+    <h1 class=first-headline>Branches</h1>
+    {% if branches %}
+      {% for branch in branches %}
+        {% if branch == activated_branch %} 
+        <form method="POST" action="/checkout?branch_name={{branch}}">
+          <input type=hidden name="branch_to_checkout" value={{branch}}/>
+          <ul>
+          <li class=crown>&#x1F451;</li>
+          <li class=crown><button class=stolen-pretty-button type="submit" id="activated">{{branch}}</button></li>
+          </ul>
+        </form>
+        {% else %}
+        <form method="POST" action="/checkout?branch_name={{branch}}">
+          <input type=hidden name="branch_to_checkout" value={{branch}}/>
+          <p><button class=stolen-pretty-button type="submit" >{{branch}}</button></p>
+        </form>
+        {%  endif %}
+      {% endfor %}
+    {%  endif %}
+    
+    <form method="POST" action='/branches'>
+      <label for="new_branch">Enter branch name:</label>
+      <input name="new_branch"/>
+      <button class=stolen-pretty-button type="submit">New branch</button>
+    </form>
+
+  </body>
+</html>

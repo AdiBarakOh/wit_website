@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    {% if checkout_ok %}
+    <meta http-equiv="refresh" content="3;url={{ redirect_url }}">
+    {% endif %}
+    <title>Wits for Wit</title>
+    <link rel="stylesheet" href="static\styles\styles.css">
+  </head>
+
+  <body>
+    <nav class="top-nav">
+      <ul>
+          <li><a href="/">Main page</a></li>
+          <li><a href="/add">Add page</a></li>
+          <li><a href="/branches">Branches page</a></li>
+          <li><a href="/checkout">Checkout page</a></li>
+      </ul>
+    </nav>
+
+    <h1 class=first-headline>Checkout</h1>
+    {% if branch_name %}
+      {% if checkout_ok %}
+        {% if files_in_branch_head_commit %}
+        <h2>files in branch:</h1>
+          {% for file_path in files_in_branch_head_commit %}
+            <p>{{file_path}}</p>
+          {% endfor %}
+        {% else: %}
+        <h2>No files in branch.</h1>
+        {% endif %}
+      <h2 class=semi-head-line>Checkout was made successfully</h2>
+      <p>redirecting...</p>
+      {% else %}
+        {% if branch_name in all_branches %}
+
+          <h2 class=semi-head-line>files in branch:</h2>
+          {% if files_in_branch_head_commit %}
+          {% for file_path in files_in_branch_head_commit %}
+            <p>{{file_path}}</p>
+          {% endfor %}
+          {% endif %}
+
+        {% else %}
+        <h2 class=semi-head-line>No branch named: {{branch_name}}</h2>
+        {% endif %}
+
+      <h2 class=semi-head-line>Checkout Failed!</h2>
+      <p>Check for changes to be committed or changes not staged for commit.</p>
+      <form action="/" method="POST">
+        <button class=stolen-pretty-button type="submit">return to homepage</button>
+      </form>
+      {% endif %}
+
+    {% else %}
+    <form method="GET">
+      <label for="branch_name">Enter branch to checkout:</label>
+      <input name="branch_name"/>
+      <button class=stolen-pretty-button type="submit">Check out</button>
+    </form>
+    {% endif %}
+  </body>
+</html>
